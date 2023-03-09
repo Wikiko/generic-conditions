@@ -9,7 +9,6 @@ import java.util.List;
 public class Condition {
     @ConfigureOperators(Operators = {Operator.IN, Operator.NOT_IN, Operator.EQUAL_TO, Operator.NOT_EQUAL_TO})
     public static String TAGS = "tags";
-    @ConfigureOperators(Operators = {Operator.EQUAL_TO, Operator.NOT_EQUAL_TO})
     public static String CHANNEL = "channel";
 
     public static Field getCondition(String conditionName) {
