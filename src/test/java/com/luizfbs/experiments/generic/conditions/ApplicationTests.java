@@ -13,13 +13,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @SpringBootTest
 class ApplicationTests {
 	final private Sample mockSample = new Sample(
 			"RETAIL",
-			List.of(new String[] { "GROCERIES_A", "GROCERIES_B", "GROCERIES_C", "GROCERIES_D" }));
+			List.of(new String[] { "GROCERIES_A", "GROCERIES_B", "GROCERIES_C", "GROCERIES_D" }),
+			BigDecimal.valueOf(10)
+			);
 
 	@Test
 	void getChannelConditionName() {
@@ -63,17 +66,29 @@ class ApplicationTests {
 
 	@Test
 	void evaluateChannelEqualToExpectedValue2UsingAnotherWays(){
-		String conditionName = "channel";
+		String fieldName = "channel";
 		String operatorName = "EQUAL_TO";
 		String expectedValue = "RETAIL";
 
-		Object conditionReference = ReflectionHelper.getValue(mockSample, conditionName);;
-		//String conditionReference = String.valueOf(Condition.getConditionReference(conditionName));
+		Object value = ReflectionHelper.getValue(mockSample, fieldName);;
 		
-		Operator2 operator = ReflectionHelper.getOperator2OfSample(conditionName, operatorName).get();
+		Operator2 operator = ReflectionHelper.getOperator2OfSample(fieldName, operatorName).get();
 
-		Boolean result = operator.evaluate.apply(conditionReference, expectedValue);
+		Boolean result = operator.apply(expectedValue, value);
 		assertTrue(result);
+	}
+
+	@Test
+	void evaluatePriceEqualToExpectedValue(){
+		String fieldName = "price";
+		String operatorName = "EQUAL_TO";
+		BigDecimal expectedValue = BigDecimal.valueOf(10);
+
+		Object value = ReflectionHelper.getValue(mockSample, fieldName);
+		
+		Operator2 operator = ReflectionHelper.getOperator2OfSample(fieldName, operatorName).get();
+
+		assertTrue(operator.apply(expectedValue, value));
 	}
 
 	@Test
@@ -87,5 +102,18 @@ class ApplicationTests {
 
 		Object result = operator.evaluate.apply(mockSample, conditionReference, expectedValue);
 		assert (result).equals(true);
+	}
+
+	@Test
+	void evaluateTagInExpectedValue2() {
+		String conditionName = "tags";
+		String operatorName = "IN";
+		String expectedValue = "GROCERIES_B";
+
+		Object value = ReflectionHelper.getValue(mockSample, conditionName);
+
+		Operator2 operator = ReflectionHelper.getOperator2OfSample(conditionName, operatorName).get();
+
+		assertTrue(operator.apply(expectedValue, value));
 	}
 }
