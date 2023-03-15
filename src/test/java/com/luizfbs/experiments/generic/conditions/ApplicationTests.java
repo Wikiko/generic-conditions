@@ -92,21 +92,8 @@ class ApplicationTests {
 	}
 
 	@Test
-	void evaluateTagInExpectedValue() {
-		String conditionName = "TAGS";
-		String operatorName = "IN";
-		String expectedValue = "GROCERIES_B";
-
-		String conditionReference = String.valueOf(Condition.getConditionReference(conditionName));
-		Operator operator = Condition.getOperator(conditionName, operatorName);
-
-		Object result = operator.evaluate.apply(mockSample, conditionReference, expectedValue);
-		assert (result).equals(true);
-	}
-
-	@Test
 	void evaluateTagInExpectedValue2() {
-		String conditionName = "tags";
+		String conditionName = "merchant_tags";
 		String operatorName = "IN";
 		String expectedValue = "GROCERIES_B";
 
@@ -115,5 +102,16 @@ class ApplicationTests {
 		Operator2 operator = ReflectionHelper.getOperator2OfSample(conditionName, operatorName).get();
 
 		assertTrue(operator.apply(expectedValue, value));
+	}
+
+	@Test
+	void evaluateMerchantTagToTestNameOnAnnotation(){
+		String conditionName = "merchant_tags";
+		String operatorName = "IN";
+		String expectedValue = "GROCERIES_B";
+
+		Object value = ReflectionHelper.getValue(mockSample, conditionName);
+
+		assertEquals(mockSample.getTags(), value);
 	}
 }

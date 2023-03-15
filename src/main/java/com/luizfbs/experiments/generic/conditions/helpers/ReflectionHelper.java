@@ -1,6 +1,7 @@
 package com.luizfbs.experiments.generic.conditions.helpers;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,14 +14,27 @@ import com.luizfbs.experiments.generic.conditions.operators.Operator2;
 public class ReflectionHelper {
     public static Object getValue(Object object, String property) {
         try {
-            Field field = object.getClass().getDeclaredField(property);
+            Field field = findFieldByNameOrAnnotationDefinedName(object, property);
+            // Field field = object.getClass().getDeclaredField(property);
             field.setAccessible(true);
             Object value = field.get(object);
             field.setAccessible(false);
             return value;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             return null;
         }
+    }
+
+    private static Field findFieldByNameOrAnnotationDefinedName(Object object, String property) {
+        Field[] declaredFields = object.getClass().getDeclaredFields();
+        Field field = Arrays.stream(declaredFields)
+        .filter(declaredField -> declaredField.isAnnotationPresent(ConfigureOperators2.class))
+        .filter(declaredField -> {
+            ConfigureOperators2 config = declaredField.getDeclaredAnnotation(ConfigureOperators2.class);
+            return config.name().isEmpty() && declaredField.getName().equalsIgnoreCase(property.trim()) || config.name().equalsIgnoreCase(property.trim());
+        })
+        .findAny().get();
+        return field;
     }
 
     public static List<Operator> getOperatorsOfSample(String fieldName) {
@@ -44,16 +58,9 @@ public class ReflectionHelper {
     }
 
     public static List<Operator2> getOperators2OfSample(String fieldName) {
-        Field field;
-        try {
-            field = Sample.class.getDeclaredField(fieldName);
-            Operator2[] operators = field.getDeclaredAnnotation(ConfigureOperators2.class).Operators();
-            return List.of(operators);
-        } catch (NoSuchFieldException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return List.of();
-        }
+        Field field = findFieldByNameOrAnnotationDefinedName(new Sample(fieldName, null, null), fieldName);
+        Operator2[] operators = field.getDeclaredAnnotation(ConfigureOperators2.class).Operators();
+        return List.of(operators);
     }
 
     public static Optional<Operator2> getOperator2OfSample(String fieldName, String operatorName) {

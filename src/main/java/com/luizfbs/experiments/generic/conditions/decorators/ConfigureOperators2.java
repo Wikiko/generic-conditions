@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigureOperators2 {
+    String name() default "";
     Operator2[] Operators();
 }

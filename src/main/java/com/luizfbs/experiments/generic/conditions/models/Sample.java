@@ -13,7 +13,7 @@ public class Sample {
     @ConfigureOperators2(Operators = {Operator2.EQUAL_TO})
     private String channel;
 
-    @ConfigureOperators2(Operators = {Operator2.IN})
+    @ConfigureOperators2(Operators = {Operator2.IN}, name = "merchant_tags")
     private List<String> tags;
 
     @ConfigureOperators2(Operators = {Operator2.EQUAL_TO})
