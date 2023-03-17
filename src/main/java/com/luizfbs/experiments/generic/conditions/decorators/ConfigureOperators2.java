@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 import java.util.function.Function;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target(ElementType.FIELD)
 public @interface ConfigureOperators2 {
     String name() default "";
     Operator2[] Operators();

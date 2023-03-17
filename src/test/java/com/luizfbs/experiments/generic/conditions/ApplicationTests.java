@@ -8,6 +8,7 @@ import com.luizfbs.experiments.generic.conditions.operators.Operator;
 import com.luizfbs.experiments.generic.conditions.operators.Operator2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -169,6 +170,25 @@ class ApplicationTests {
 			InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		String fieldName = "cityTier";
 		String expectedValue = "tier 1";
+		Object value = operatorsHelper.getValue(mockSample, fieldName);
+
+		Class<? extends Converter> converter = operatorsHelper.getConverter(fieldName);
+		if (converter != null) {
+			Converter converterInstance = converter.getDeclaredConstructor().newInstance();
+			Object valueToBeCompared = converterInstance.execute(value);
+
+			Operator2 operator = operatorsHelper.getOperator(fieldName, "IN");
+
+			assertTrue(operator.apply(expectedValue, valueToBeCompared));
+		}
+	}
+
+	@Test
+	// @Disabled
+	void testingClassWithAnotherAnnotation() throws IllegalArgumentException, IllegalAccessException,
+			InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		String fieldName = "mood";
+		String expectedValue = "HAPPY";
 		Object value = operatorsHelper.getValue(mockSample, fieldName);
 
 		Class<? extends Converter> converter = operatorsHelper.getConverter(fieldName);

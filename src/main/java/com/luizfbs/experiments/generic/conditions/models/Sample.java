@@ -6,13 +6,19 @@ import java.util.concurrent.Callable;
 
 import com.luizfbs.experiments.generic.conditions.decorators.ConfigureOperators;
 import com.luizfbs.experiments.generic.conditions.decorators.ConfigureOperators2;
+import com.luizfbs.experiments.generic.conditions.decorators.ConfigureOperatorsForClass;
+import com.luizfbs.experiments.generic.conditions.decorators.SettingsOperators;
 import com.luizfbs.experiments.generic.conditions.helpers.CityTierConverter;
 import com.luizfbs.experiments.generic.conditions.helpers.Converter;
 import com.luizfbs.experiments.generic.conditions.helpers.HasTargetItemConverter;
+import com.luizfbs.experiments.generic.conditions.helpers.MoodConverter;
 import com.luizfbs.experiments.generic.conditions.operators.Operator;
 import com.luizfbs.experiments.generic.conditions.operators.Operator2;
 
-@ConfigureOperators2(Operators = {Operator2.IN}, name="cityTier", converter = CityTierConverter.class)
+@SettingsOperators({
+    @ConfigureOperatorsForClass(Operators = {Operator2.IN}, name="cityTier", converter = CityTierConverter.class),
+    @ConfigureOperatorsForClass(Operators = {Operator2.IN}, name="mood", converter = MoodConverter.class)
+})
 public class Sample {
     @ConfigureOperators(Operators = {Operator.EQUAL_TO, Operator.NOT_EQUAL_TO})
     @ConfigureOperators2(Operators = {Operator2.EQUAL_TO})
