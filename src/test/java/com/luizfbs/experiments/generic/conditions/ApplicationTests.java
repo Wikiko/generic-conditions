@@ -137,19 +137,9 @@ class ApplicationTests {
 	}
 
 	@Test
-	void testingConverter() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException {
-		Class<Converter> clazzConverter = operatorsHelper.getConverter("price");
-
-		Converter converter = clazzConverter.getDeclaredConstructor().newInstance();
-
-		assertEquals(mockSample, converter.execute(mockSample));
-	}
-
-	@Test
 	void testingHasTargetItemConverter() throws InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Class<Converter> clazzConverter = operatorsHelper.getConverter("hasTargetItem");
+		Class<? extends Converter> clazzConverter = operatorsHelper.getConverter("hasTargetItem");
 
 		Converter converter = clazzConverter.getDeclaredConstructor().newInstance();
 
@@ -163,13 +153,31 @@ class ApplicationTests {
 		String expectedValue = "ITEM";
 		Object value = operatorsHelper.getValue(mockSample, fieldName);
 
-		Class<Converter> converter = operatorsHelper.getConverter(fieldName);
+		Class<? extends Converter> converter = operatorsHelper.getConverter(fieldName);
 		if (converter != null) {
 			Converter converterInstance = converter.getDeclaredConstructor().newInstance();
 			Object valueToBeCompared = converterInstance.execute(value);
 
 			Operator2 operator = operatorsHelper.getOperator(fieldName, "EQUAL_TO");
-	
+
+			assertTrue(operator.apply(expectedValue, valueToBeCompared));
+		}
+	}
+
+	@Test
+	void testingClassAnnotationSimulatingCityTierAmls() throws IllegalArgumentException, IllegalAccessException,
+			InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		String fieldName = "cityTier";
+		String expectedValue = "tier 1";
+		Object value = operatorsHelper.getValue(mockSample, fieldName);
+
+		Class<? extends Converter> converter = operatorsHelper.getConverter(fieldName);
+		if (converter != null) {
+			Converter converterInstance = converter.getDeclaredConstructor().newInstance();
+			Object valueToBeCompared = converterInstance.execute(value);
+
+			Operator2 operator = operatorsHelper.getOperator(fieldName, "IN");
+
 			assertTrue(operator.apply(expectedValue, valueToBeCompared));
 		}
 	}

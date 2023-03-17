@@ -58,7 +58,7 @@ public class ReflectionHelper {
     }
 
     public static List<Operator2> getOperators2OfSample(String fieldName) {
-        Field field = findFieldByNameOrAnnotationDefinedName(new Sample(fieldName, null, null), fieldName);
+        Field field = findFieldByNameOrAnnotationDefinedName(new Sample(fieldName, null, null, false), fieldName);
         Operator2[] operators = field.getDeclaredAnnotation(ConfigureOperators2.class).Operators();
         return List.of(operators);
     }

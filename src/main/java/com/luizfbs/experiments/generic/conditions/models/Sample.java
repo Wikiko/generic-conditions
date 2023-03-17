@@ -6,11 +6,13 @@ import java.util.concurrent.Callable;
 
 import com.luizfbs.experiments.generic.conditions.decorators.ConfigureOperators;
 import com.luizfbs.experiments.generic.conditions.decorators.ConfigureOperators2;
+import com.luizfbs.experiments.generic.conditions.helpers.CityTierConverter;
 import com.luizfbs.experiments.generic.conditions.helpers.Converter;
 import com.luizfbs.experiments.generic.conditions.helpers.HasTargetItemConverter;
 import com.luizfbs.experiments.generic.conditions.operators.Operator;
 import com.luizfbs.experiments.generic.conditions.operators.Operator2;
 
+@ConfigureOperators2(Operators = {Operator2.IN}, name="cityTier", converter = CityTierConverter.class)
 public class Sample {
     @ConfigureOperators(Operators = {Operator.EQUAL_TO, Operator.NOT_EQUAL_TO})
     @ConfigureOperators2(Operators = {Operator2.EQUAL_TO})
@@ -24,6 +26,10 @@ public class Sample {
 
     @ConfigureOperators2(Operators = {Operator2.EQUAL_TO}, converter = HasTargetItemConverter.class)
     private boolean hasTargetItem;
+
+    private String city = "Nova Odessa";
+
+    private String state = "SP";
 
     public Sample(String channel, List<String> tags, BigDecimal price, boolean hasTargetItem) {
         this.channel = channel;
@@ -42,5 +48,13 @@ public class Sample {
 
     public boolean hasTargetItem() {
         return this.hasTargetItem;
+    }
+
+    public String getCity(){
+        return this.city;
+    }
+
+    public String getState(){
+        return this.state;
     }
 }

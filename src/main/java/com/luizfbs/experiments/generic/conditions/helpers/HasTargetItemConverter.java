@@ -1,6 +1,6 @@
 package com.luizfbs.experiments.generic.conditions.helpers;
 
-public class HasTargetItemConverter extends Converter {
+public class HasTargetItemConverter implements Converter {
 
     @Override
     public Object execute(Object object) {

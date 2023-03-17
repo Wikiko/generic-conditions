@@ -21,7 +21,7 @@ public class InGeneral {
                 .collect(Collectors.toSet());
 
         if(expectedValue instanceof String expectedString) {
-            return matchValues.contains(expectedString);
+            return matchValues.contains(expectedString.toUpperCase());
         }
 
         if (expectedValue instanceof List<?> expectedList && !expectedList.isEmpty()
